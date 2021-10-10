@@ -1,0 +1,158 @@
+server:
+  http_listen_port: 65534
+  http_listen_address: 127.0.0.2
+  grpc_listen_port: 65533
+  grpc_listen_address: 127.0.0.2
+
+prometheus:
+  global:
+    scrape_interval: 1m
+  wal_directory: /var/lib/grafana-agent/wal
+  configs:
+    - name: {{ ansible_fqdn }}
+      host_filter: false
+      remote_write:
+        - url: {{ grafana_agent_prometheus_target }}
+{% if grafana_agent_prometheus_target_ssl %}
+          tls_config:
+            ca_file: /etc/grafana-agent/client-ca.pem
+            cert_file: /etc/grafana-agent/client.pem
+            key_file: /etc/grafana-agent/client.key
+{% endif %}
+
+integrations:
+  prometheus_remote_write:
+    - url: {{ grafana_agent_prometheus_target }}
+{% if grafana_agent_prometheus_target_ssl %}
+      tls_config:
+        ca_file: /etc/grafana-agent/client-ca.pem
+        cert_file: /etc/grafana-agent/client.pem
+        key_file: /etc/grafana-agent/client.key
+{% endif %}
+  agent:
+    enabled: true
+  node_exporter:
+    enabled: true
+    rootfs_path: /
+    sysfs_path: /sys
+    procfs_path: /proc
+    textfile_directory: /var/lib/prometheus/node-exporter
+    set_collectors:
+      - timex
+    enable_collectors:
+{% if grafana_agent_prometheus_nodeexporter_arp %}      - arp
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_bcache %}      - bcache
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_bonding %}      - bonding
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_btrfs %}      - btrfs
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_buddyinfo %}      - buddyinfo
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_conntrack %}      - conntrack
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_cpu %}      - cpu
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_cpufreq %}      - cpufreq
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_diskstats %}      - diskstats
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_drbd %}      - drbd
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_edac %}      - edac
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_entropy %}      - entropy
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_fibrechannel %}      - fibrechannel
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_filefd %}      - filefd
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_filesystem %}      - filesystem
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_hwmon %}      - hwmon
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_infiniband %}      - infiniband
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_interrupts %}      - interrupts
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_ipvs %}      - ipvs
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_ksmd %}      - ksmd
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_loadavg %}      - loadavg
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_logind %}      - logind
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_mdadm %}      - mdadm
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_meminfo %}      - meminfo
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_meminfo_numa %}      - meminfo_numa
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_mountstats %}      - mountstats
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_netclass %}      - netclass
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_netdev %}      - netdev
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_netstat %}      - netstat
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_network_route %}      - network_route
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_nfs %}      - nfs
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_nfsd %}      - nfsd
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_ntp %}      - ntp
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_perf %}      - perf
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_powersupplyclass %}      - powersupplyclass
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_pressure %}      - pressure
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_processes %}      - processes
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_qdisc %}      - qdisc
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_rapl %}      - rapl
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_runit %}      - runit
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_schedstat %}      - schedstat
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_sockstat %}      - sockstat
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_softnet %}      - softnet
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_stat %}      - stat
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_supervisord %}      - supervisord
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_systemd %}      - systemd
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_tcpstat %}      - tcpstat
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_textfile %}      - textfile
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_thermal_zone %}      - thermal_zone
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_time %}      - time
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_timex %}      - timex
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_udp_queues %}      - udp_queues
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_uname %}      - uname
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_vmstat %}      - vmstat
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_wifi %}      - wifi
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_xfs %}      - xfs
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_zfs %}      - zfs
+{% endif %}
+{% if grafana_agent_prometheus_nodeexporter_zoneinfo %}      - zoneinfo
+{% endif %}

@@ -1,0 +1,13 @@
+- name: restart grafana-agent
+  become: True
+  service:
+    name: grafana-agent
+    state: restarted
+    enabled: yes
+
+- name: restart prometheus-node-exporter
+  become: True
+  service:
+    name: grafana-agent
+    state: restarted
+    enabled: yes

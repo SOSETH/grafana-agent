@@ -1,0 +1,138 @@
+- name: Install Grafana Agent
+  become: True
+  apt:
+    state: present
+    update_cache: yes
+    cache_valid_time: 1800
+    name:
+      - grafana-agent
+
+- name: Install node exporter plugins
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  apt:
+    state: present
+    update_cache: yes
+    cache_valid_time: 1800
+    name:
+      - prometheus-node-exporter-collectors
+
+- name: Disable the standalone node exporter
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  systemd:
+    name: prometheus-node-exporter
+    state: stopped
+    enabled: no
+    masked: yes
+
+- name: Configure Grafana Agent (environment)
+  become: True
+  template:
+    src: grafana-agent-env.j2
+    dest: /etc/default/grafana-agent
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart grafana-agent
+
+- name: Configure Grafana Agent (main config)
+  become: True
+  template:
+    src: grafana-agent.yaml.j2
+    dest: /etc/grafana-agent/config.yaml
+    owner: grafana-agent
+    group: grafana-agent
+    mode: 0660
+  notify: restart grafana-agent
+
+- name: Remove standalone prometheus node exporter config
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  file:
+    path: /etc/default/prometheus-node-exporter
+    state: absent
+
+- name: Configure prometheus node exporter add-in (apt)
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  service:
+    name: prometheus-node-exporter-apt.timer
+    state: "{{ 'started' if grafana_agent_enable_nodeexporter_apt else 'stopped' }}"
+    enabled: "{{ grafana_agent_enable_nodeexporter_apt }}"
+
+- name: Clean old node exporter add-in file (apt)
+  when: grafana_agent_enable_nodeexporter and not grafana_agent_enable_nodeexporter_apt
+  become: True
+  file:
+    path: /var/lib/prometheus/node-exporter/apt.prom
+    state: absent
+
+- name: Configure prometheus node exporter add-in (ipmi)
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  service:
+    name: prometheus-node-exporter-ipmitool-sensor.timer
+    state: "{{ 'started' if grafana_agent_enable_nodeexporter_ipmi else 'stopped' }}"
+    enabled: "{{ grafana_agent_enable_nodeexporter_ipmi }}"
+
+- name: Clean old node exporter add-in file (ipmi)
+  when: grafana_agent_enable_nodeexporter and not grafana_agent_enable_nodeexporter_ipmi
+  become: True
+  file:
+    path: /var/lib/prometheus/node-exporter/ipmitool_sensor.prom
+    state: absent
+
+- name: Configure prometheus node exporter add-in (nvme)
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  service:
+    name: prometheus-node-exporter-nvme.timer
+    state: "{{ 'started' if grafana_agent_enable_nodeexporter_nvme else 'stopped' }}"
+    enabled: "{{ grafana_agent_enable_nodeexporter_nvme }}"
+
+- name: Clean old node exporter add-in file (nvme)
+  when: grafana_agent_enable_nodeexporter and not grafana_agent_enable_nodeexporter_nvme
+  become: True
+  file:
+    path: /var/lib/prometheus/node-exporter/nvme.prom
+    state: absent
+
+- name: Configure prometheus node exporter add-in (smart)
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  service:
+    name: prometheus-node-exporter-smartmon.timer
+    state: "{{ 'started' if grafana_agent_enable_nodeexporter_smart else 'stopped' }}"
+    enabled: "{{ grafana_agent_enable_nodeexporter_smart }}"
+
+- name: Clean old node exporter add-in file (smart)
+  when: grafana_agent_enable_nodeexporter and not grafana_agent_enable_nodeexporter_smart
+  become: True
+  file:
+    path: /var/lib/prometheus/node-exporter/smartmon.prom
+    state: absent
+
+- name: Configure prometheus node exporter add-in (mellanox HCA temperature)
+  when: grafana_agent_enable_nodeexporter
+  become: True
+  service:
+    name: prometheus-node-exporter-mellanox-hca-temp.timer
+    state: "{{ 'started' if grafana_agent_enable_nodeexporter_mlx_hca_temp else 'stopped' }}"
+    enabled: "{{ grafana_agent_enable_nodeexporter_mlx_hca_temp }}"
+
+- name: Clean old node exporter add-in file (mellanox HCA temperature)
+  when: grafana_agent_enable_nodeexporter and not grafana_agent_enable_nodeexporter_mlx_hca_temp
+  become: True
+  file:
+    path: /var/lib/prometheus/node-exporter/mellanox_hca_temp.prom
+    state: absent
+
+- name: Cleanup config folder permissions
+  become: True
+  changed_when: False
+  file:
+    path: /etc/grafana-agent
+    owner: grafana-agent
+    group: grafana-agent
+    mode: 0770
