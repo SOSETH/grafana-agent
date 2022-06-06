@@ -4,7 +4,7 @@ server:
   grpc_listen_port: 65533
   grpc_listen_address: 127.0.0.2
 
-prometheus:
+metrics:
   global:
     scrape_interval: 1m
   wal_directory: /var/lib/grafana-agent/wal
@@ -13,8 +13,9 @@ prometheus:
       host_filter: false
       remote_write:
         - url: {{ grafana_agent_prometheus_target }}
-          min_backoff: 30s
-          max_backoff: 10m
+          queue_config:
+            min_backoff: 30s
+            max_backoff: 10m
 {% if grafana_agent_prometheus_target_ssl %}
           tls_config:
             ca_file: /etc/grafana-agent/client-ca.pem
@@ -25,6 +26,9 @@ prometheus:
 integrations:
   prometheus_remote_write:
     - url: {{ grafana_agent_prometheus_target }}
+      queue_config:
+        min_backoff: 30s
+        max_backoff: 10m
 {% if grafana_agent_prometheus_target_ssl %}
       tls_config:
         ca_file: /etc/grafana-agent/client-ca.pem
