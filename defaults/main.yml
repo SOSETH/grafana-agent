@@ -67,4 +67,4 @@ grafana_agent_prometheus_nodeexporter_xfs: True
 grafana_agent_prometheus_nodeexporter_zfs: True
 grafana_agent_prometheus_nodeexporter_zoneinfo: False
 
-
+grafana_agent_prometheus_scrapes: []

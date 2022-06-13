@@ -11,6 +11,8 @@ metrics:
   configs:
     - name: {{ ansible_fqdn }}
       host_filter: false
+      scrape_configs:
+        {{ grafana_agent_prometheus_scrapes|to_yaml|indent(8)}}
       remote_write:
         - url: {{ grafana_agent_prometheus_target }}
           queue_config:
