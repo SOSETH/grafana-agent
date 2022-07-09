@@ -164,3 +164,21 @@ integrations:
 {% endif %}
 {% if grafana_agent_prometheus_nodeexporter_zoneinfo %}      - zoneinfo
 {% endif %}
+{% if grafana_agent_enable_postgresexporter %}
+  postgres_exporter:
+    enabled: true
+{% if grafana_agent_prometheus_postgresexporter_instance is defined %}    instance: {{ grafana_agent_prometheus_postgresexporter_instance }}
+{% endif %}
+    data_source_names:
+      {{ grafana_agent_prometheus_postgresexporter_datasourcenames | to_nice_yaml | indent(6) }}
+    autodiscover_databases: {{ grafana_agent_prometheus_postgresexporter_autodiscoverdatabases }}
+    exclude_databases:
+{% if grafana_agent_prometheus_postgresexporter_excludedatabases is defined %}{{ grafana_agent_prometheus_postgresexporter_excludedatabases | to_nice_yaml | indent(6) }}
+{% endif %}
+    include_databases:
+{% if grafana_agent_prometheus_postgresexporter_includedatabases is defined %}{{ grafana_agent_prometheus_postgresexporter_includedatabases | to_nice_yaml | indent(6) }}
+{% endif %}
+{% if grafana_agent_prometheus_postgresexporter_querypath is defined %}    query_path: {{ grafana_agent_prometheus_postgresexporter_querypath }}
+{% endif %}
+    disable_default_metrics: {{ grafana_agent_prometheus_postgresexporter_disabledefaultmetrics }}
+{% endif %}
