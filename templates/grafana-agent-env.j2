@@ -2,3 +2,4 @@ CONFIG_FILE=/etc/grafana-agent/config.yaml
 LOG_LEVEL=warn
 HOSTNAME={{ ansible_fqdn }}
 ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH=go1.18
+CUSTOM_ARGS="-disable-reporting"
