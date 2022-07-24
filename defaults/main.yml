@@ -67,4 +67,16 @@ grafana_agent_prometheus_nodeexporter_xfs: True
 grafana_agent_prometheus_nodeexporter_zfs: True
 grafana_agent_prometheus_nodeexporter_zoneinfo: False
 
+grafana_agent_enable_postgresexporter: False
+# grafana_agent_prometheus_postgresexporter_instance:
+grafana_agent_prometheus_postgresexporter_datasourcenames: []
+# If False, only collect from DBs in
+# grafana_agent_prometheus_postgresexporter_datasourcenames
+grafana_agent_prometheus_postgresexporter_autodiscoverdatabases: False
+# grafana_agent_prometheus_postgresexporter_excludedatabases: []
+# grafana_agent_prometheus_postgresexporter_includedatabases: []
+# Example https://github.com/prometheus-community/postgres_exporter/blob/master/queries.yaml
+# grafana_agent_prometheus_postgresexporter_querypath: "/path/to/queries.yaml"
+grafana_agent_prometheus_postgresexporter_disabledefaultmetrics: False
+
 grafana_agent_prometheus_scrapes: []
