@@ -7,6 +7,23 @@ So far, only the integrated node_exporter is configured.
 
 * `grafana_agent_prometheus_scrapes`: Allows you to pass through Prometheus scraping blocks
 
+## Logs
+
+You can enable log-collection using the integrated Promtail.
+For this, the variables `grafana_agent_logs_scrape_config` and
+`grafana_agent_logs_client_url` must be set. The latter is a Loki-endpoint to
+which the logs will be sent. An example for `grafana_agent_logs_scrape_config`
+is:
+
+    grafana_agent_logs_scrape_config:
+      - job_name: varlogs
+        static_configs:
+          - targets: [localhost]
+            labels:
+              job: varlogs
+              __path__: /var/log/*log
+              hostname: "{{ ansible_fqdn }}"
+
 ## Postgres exporter
 
 Follow the [official documentation](https://github.com/prometheus-community/postgres_exporter#running-as-non-superuser)
