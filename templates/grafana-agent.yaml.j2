@@ -24,6 +24,21 @@ metrics:
             cert_file: /etc/grafana-agent/client.pem
             key_file: /etc/grafana-agent/client.key
 {% endif %}
+{% if grafana_agent_logs_scrape_config is defined %}
+logs:
+  configs:
+  - name: default
+    positions:
+      filename: /tmp/positions.yaml
+    scrape_configs:
+      {{ grafana_agent_logs_scrape_config | to_yaml | indent(6) }}
+    clients:
+      - url: {{ grafana_agent_logs_client_url }}
+        tls_config:
+          ca_file: /etc/grafana-agent/client-ca.pem
+          cert_file: /etc/grafana-agent/client.pem
+          key_file: /etc/grafana-agent/client.key
+{% endif %}
 
 integrations:
   prometheus_remote_write:
