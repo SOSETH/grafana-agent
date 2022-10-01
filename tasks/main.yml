@@ -16,6 +16,7 @@
     cache_valid_time: 1800
     name:
       - prometheus-node-exporter-collectors
+      - jq
 
 - name: Disable the standalone node exporter
   when: grafana_agent_enable_nodeexporter
