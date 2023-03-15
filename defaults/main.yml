@@ -1,6 +1,11 @@
 grafana_agent_prometheus_target: "https://prom-ship.example.org/api/v1/write"
 grafana_agent_prometheus_target_ssl: True
 
+grafana_agent_http_listen_address: 127.0.0.2
+grafana_agent_http_listen_port: 65534
+grafana_agent_grpc_listen_address: 127.0.0.2
+grafana_agent_grpc_listen_port: 65533
+
 grafana_agent_enable_nodeexporter: True
 grafana_agent_enable_nodeexporter_apt: False
 grafana_agent_enable_nodeexporter_ipmi: False
