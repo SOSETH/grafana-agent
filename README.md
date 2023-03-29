@@ -24,6 +24,19 @@ is:
               __path__: /var/log/*log
               hostname: "{{ ansible_fqdn }}"
 
+## Blackbox (Website probes)
+
+Set `grafana_agent_enable_blackbox` to `true` and add the targets you want to
+be probed in `grafana_agent_blackbox_targets`, e.g:
+
+    grafana_agent_blackbox_targets:
+      - name: example
+        address: example.com
+        module: http_2xx
+
+The module must be a [blackbox module](https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md) defined in `grafana_agent_blackbox_module_config`.
+
+
 ## Postgres exporter
 
 Follow the [official documentation](https://github.com/prometheus-community/postgres_exporter#running-as-non-superuser)

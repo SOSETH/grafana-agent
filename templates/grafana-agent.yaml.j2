@@ -173,6 +173,24 @@ integrations:
 {% endif %}
 {% if grafana_agent_prometheus_nodeexporter_zoneinfo %}      - zoneinfo
 {% endif %}
+
+{% if grafana_agent_enable_blackbox %}
+  blackbox:
+    enabled: true
+    scrape_interval: {{ grafana_agent_blackbox_scrape_interval }}
+    relabel_configs:
+      - target_label: instance
+        source_labels: [__param_target]
+    blackbox_targets:
+{% for target in grafana_agent_blackbox_targets %}      - name: {{ target.name | default(target.address) }}
+        address: {{ target.address }}
+        module: {{ target.module }}
+{% endfor %}
+    blackbox_config:
+      modules:
+        {{ grafana_agent_blackbox_modules_config | to_nice_yaml | indent(8) }}
+{% endif %}
+
 {% if grafana_agent_enable_postgresexporter %}
   postgres_exporter:
     enabled: true

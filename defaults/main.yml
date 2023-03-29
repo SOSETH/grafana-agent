@@ -72,6 +72,19 @@ grafana_agent_prometheus_nodeexporter_xfs: True
 grafana_agent_prometheus_nodeexporter_zfs: True
 grafana_agent_prometheus_nodeexporter_zoneinfo: False
 
+# Blackbox
+grafana_agent_enable_blackbox: False
+grafana_agent_blackbox_targets: []
+grafana_agent_blackbox_scrape_interval: 1m
+grafana_agent_blackbox_module_config:
+  - http_2xx:
+      prober: http
+  - http_post_2xx:
+      prober: http
+      http:
+        method: POST
+
+# PostgreSQL
 grafana_agent_enable_postgresexporter: False
 # grafana_agent_prometheus_postgresexporter_instance:
 grafana_agent_prometheus_postgresexporter_datasourcenames: []
