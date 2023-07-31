@@ -23,7 +23,7 @@ logs:
   configs:
   - name: default
     positions:
-      filename: /tmp/positions.yaml
+      filename: /var/lib/grafana-agent/positions.yaml
     scrape_configs:
       {{ grafana_agent_logs_scrape_config | to_yaml | indent(6) }}
     clients:
