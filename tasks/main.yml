@@ -27,6 +27,12 @@
     enabled: no
     masked: yes
 
+- name: Combine variables
+  ansible.builtin.set_fact:
+    grafana_agent_logs_scrape_config_combined: "{{ grafana_agent_logs_scrape_config|default([]) + grafana_agent_logs_scrape_host|default([]) + grafana_agent_logs_scrape_group_a|default([]) + grafana_agent_logs_scrape_group_b|default([]) + grafana_agent_logs_scrape_group_c|default([])+ grafana_agent_logs_scrape_special|default([]) }}"
+    grafana_agent_prometheus_scrapes_combined: "{{ grafana_agent_prometheus_scrapes|default([]) + grafana_agent_prometheus_scrapes_host|default([]) + grafana_agent_prometheus_scrapes_group_a|default([]) + grafana_agent_prometheus_scrapes_group_b|default([]) + grafana_agent_prometheus_scrapes_group_c|default([])+ grafana_agent_prometheus_scrapes_special|default([]) }}"
+    grafana_agent_blackbox_targets_merged: "{{ grafana_agent_blackbox_targets|default([]) + grafana_agent_blackbox_targets_host|default([]) + grafana_agent_blackbox_targets_group_a|default([]) + grafana_agent_blackbox_targets_group_b|default([]) + grafana_agent_blackbox_targets_group_c|default([])+ grafana_agent_blackbox_targets_special|default([]) }}"
+
 - name: Configure Grafana Agent (environment)
   become: True
   template:

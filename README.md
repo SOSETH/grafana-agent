@@ -6,6 +6,11 @@ So far, only the integrated node_exporter is configured.
 ## Config options
 
 * `grafana_agent_prometheus_scrapes`: Allows you to pass through Prometheus scraping blocks
+* `grafana_agent_logs_scrape`: Allows you to pass through loki scraping blocks
+* `grafana_agent_blackbox_targets`: Allows you to pass through blackbox scraping blocks
+
+Note: Both options also exist with `_host`, `_group_a`, `_group_b`, `_group_c` and `_special` suffixes.
+All values are merged together in the role - this allows you to sidestep group var merging issues.
 
 ## Logs
 

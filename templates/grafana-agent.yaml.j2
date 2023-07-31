@@ -6,7 +6,7 @@ metrics:
     - name: {{ ansible_fqdn }}
       host_filter: false
       scrape_configs:
-        {{ grafana_agent_prometheus_scrapes|to_yaml|indent(8)}}
+        {{ grafana_agent_prometheus_scrapes_combined|to_yaml|indent(8)}}
       remote_write:
         - url: {{ grafana_agent_prometheus_target }}
           queue_config:
@@ -18,14 +18,14 @@ metrics:
             cert_file: /etc/grafana-agent/client.pem
             key_file: /etc/grafana-agent/client.key
 {% endif %}
-{% if grafana_agent_logs_scrape_config is defined %}
+{% if grafana_agent_logs_scrape_config_combined|length > 0 %}
 logs:
   configs:
   - name: default
     positions:
       filename: /var/lib/grafana-agent/positions.yaml
     scrape_configs:
-      {{ grafana_agent_logs_scrape_config | to_yaml | indent(6) }}
+      {{ grafana_agent_logs_scrape_config_combined | to_yaml | indent(6) }}
     clients:
       - url: {{ grafana_agent_logs_client_url }}
         tls_config:
@@ -182,7 +182,7 @@ integrations:
       - target_label: instance
         source_labels: [__param_target]
     blackbox_targets:
-{% for target in grafana_agent_blackbox_targets %}      - name: {{ target.name | default(target.address) }}
+{% for target in grafana_agent_blackbox_targets_merged %}      - name: {{ target.name | default(target.address) }}
         address: {{ target.address }}
         module: {{ target.module }}
 {% endfor %}
